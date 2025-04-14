@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.ticket.model.Booking;
 import com.company.ticket.service.BookingService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,12 +28,14 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 
+	@Operation(summary = "Ticket Booking", description = "Returns Ticket Booking Object.")
 	@PostMapping("/save")
 	public ResponseEntity<Booking> save(@RequestBody Booking booking) {
-		log.info("");
+		log.info("Ticket Booking Initiated. : {}", booking);
 		return new ResponseEntity<>(bookingService.save(booking), HttpStatus.OK);
 	}
 
+	@Operation(summary = "Ticket Booking", description = "Returns Ticket Booking Object.")
 	@GetMapping("/{id}")
 	public ResponseEntity<Booking> get(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(bookingService.findById(id), HttpStatus.OK);

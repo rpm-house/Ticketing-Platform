@@ -19,6 +19,7 @@ import com.company.security.service.RoleService;
 import com.company.security.service.UserService;
 import com.company.ticket.dto.UserDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class UserController {
 	@Autowired
 	RoleService roleService;
 
+	@Operation(summary = "Save user", description = "Returns User Object.")
 	@PostMapping("/save")
 	public ResponseEntity<User> save(@RequestBody UserDTO userDTO) throws TicketException {
 		User savedUser = null;
@@ -49,11 +51,13 @@ public class UserController {
 		} else if (userDTO.getUserType().equalsIgnoreCase("B2C")) {
 			role = roles.stream().filter(r -> r.getName().equalsIgnoreCase("ROLE_CUSTOMER")).findFirst().get();
 		} else {
+			log.error("In valid User Type.");
 			throw new TicketException("In valid User Type.");
 		}
 		roleSet.add(role);
 		user.setRoles(roleSet);
 		savedUser = userService.saveOrUpdate(user, false);
+		log.info("User Created. : {}", savedUser);
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
 

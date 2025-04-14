@@ -1,18 +1,61 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.company</groupId>
-    <artifactId>Ticketing-Platform</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>Tciketing-MS</artifactId>
-  <name>Ticketing-Platform MS</name>
-  <description>Ticketing-Platform Microservice</description>
-  <dependencies>
-  <dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.company</groupId>
+		<artifactId>Ticketing-Platform</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>Tciketing-MS</artifactId>
+	<name>Ticketing-Platform MS</name>
+	<description>Ticketing-Platform Microservice</description>
+	<dependencies>
+		<dependency>
 			<groupId>com.company</groupId>
 			<artifactId>Ticketing-Security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
+
+	<properties>
+		<java.version>17</java.version>
+		<docker.image.prefix>spring-boot-docker</docker.image.prefix>
+		<docker.image.exposed.port>8080</docker.image.exposed.port>
+		<docker.image.dockerfile.dir>${basedir}</docker.image.dockerfile.dir>
+		<docker.image.dockerize.version>v0.6.1</docker.image.dockerize.version>
+		<docker.plugin.version>1.2.0</docker.plugin.version>
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.12</version>
+				<configuration>
+					<repository>${docker.image.prefix}/ticket-app</repository>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.company.TicketApp</mainClass>
+				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

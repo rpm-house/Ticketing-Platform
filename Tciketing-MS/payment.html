@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+function payNow() {
+    fetch("/api/payment/create?amount=500")
+        .then(res => res.json())
+        .then(order => {
+            const options = {
+                key: "rzp_test_yourKeyHere",
+                amount: order.amount,
+                currency: order.currency,
+                name: "MyApp",
+                description: "Test Transaction",
+                order_id: order.id,
+                handler: function (response) {
+                    alert("Payment successful!");
+                    // Send response.razorpay_payment_id and signature to backend
+                },
+                theme: { color: "#3399cc" }
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+        });
+}
+</script>
+</head>
+<body>
+<button onclick="payNow()">Pay</button>
+</body>
+</html>

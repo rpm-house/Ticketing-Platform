@@ -18,6 +18,7 @@ import com.company.security.model.User;
 import com.company.security.service.RoleService;
 import com.company.security.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,18 +33,23 @@ public class AdminController {
 	@Autowired
 	UserService userService;
 
+	@Operation(summary = "Save Role", description = "Returns Role Set.")
 	@PostMapping("/saveRole")
 	public ResponseEntity<Role> createRole(@RequestBody Role role) throws URISyntaxException {
 		Role savedRole = roleService.save(role);
+		log.info("Role Created. : {}", savedRole);
 		return new ResponseEntity<>(savedRole, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Get List of roles", description = "Returns List of Users.")
 	@GetMapping("/roles")
 	public ResponseEntity<List<Role>> getRoles() {
 		List<Role> roles = roleService.findAll();
+		log.info("No Of Roles Fetched. : {}", roles.size());
 		return new ResponseEntity<>(roles, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Save user", description = "Returns User Object.")
 	@PostMapping("/saveUser")
 	public ResponseEntity<User> save(@RequestBody User user) {
 		User savedUser = null;

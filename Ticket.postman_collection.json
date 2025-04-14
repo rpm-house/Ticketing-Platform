@@ -1,0 +1,473 @@
+{
+	"info": {
+		"_postman_id": "48b5be17-d2f0-458e-81d3-fb0fa4b0cfb7",
+		"name": "Ticket",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1381153"
+	},
+	"item": [
+		{
+			"name": "get Token (Open)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var token = jsonData.accessToken; // Assuming the token is in access_token field\r",
+							"pm.environment.set(\"authToken\", token); // Save to environment variable"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"rmdmohan\",\r\n    \"password\": \"password\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}auth/login",
+					"host": [
+						"{{Ticket_URL}}auth"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save User (Open)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Mohan\",\r\n    \"username\": \"rmdmohan\",\r\n    \"password\": \"password\",\r\n    \"email\": \"rmdmohan@gmail.com\",\r\n    \"roles\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"ADMIN\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}user/save",
+					"host": [
+						"{{Ticket_URL}}user"
+					],
+					"path": [
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Initialize (Admin)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}initialize/",
+					"host": [
+						"{{Ticket_URL}}initialize"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save User (Admin)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Mohan\",\r\n    \"username\": \"rmdmohan\",\r\n    \"password\": \"password\",\r\n    \"email\": \"rmdmohan@gmail.com\",\r\n    \"roles\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"ADMIN\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}user/save",
+					"host": [
+						"{{Ticket_URL}}user"
+					],
+					"path": [
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save Role (Admin)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"ROLE_CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}admin/saveRole",
+					"host": [
+						"{{Ticket_URL}}admin"
+					],
+					"path": [
+						"saveRole"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Roles (Admin)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}admin/roles",
+					"host": [
+						"{{Ticket_URL}}admin"
+					],
+					"path": [
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save theatre (Partner)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"PVR\",\r\n    \"city\":\"Chennai\",\r\n    \"area\":\"OMR\",\r\n    \"screens\":[{\r\n        \"name\":\"Screen1\",\r\n        \"totalSeats\":200,\r\n        \"type\":\"AC\",\r\n        \"seats\":[{\r\n        \"row\":\"A\",\r\n        \"seatNumber\":\"10\",\r\n        \"type\":\"SOFA\"\r\n    },\r\n    {\r\n        \"row\":\"A\",\r\n        \"seatNumber\":\"11\",\r\n        \"type\":\"SOFA\"\r\n    }]\r\n    },\r\n    {\r\n        \"name\":\"Screen2\",\r\n        \"totalSeats\":100,\r\n        \"type\":\"MINI\",\r\n        \"seats\":[{\r\n        \"row\":\"B\",\r\n        \"seatNumber\":\"10\",\r\n        \"type\":\"SOFA\"\r\n    },\r\n    {\r\n        \"row\":\"B\",\r\n        \"seatNumber\":\"11\",\r\n        \"type\":\"SOFA\"\r\n    }]\r\n    }]\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8080/theatre/save",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"theatre",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Theatre (Partner)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}theatre/",
+					"host": [
+						"{{Ticket_URL}}theatre"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save Movie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"JanaNayagan\",\r\n    \"language\":\"Tamil\",\r\n    \"genres\":\"Political Action\",\r\n    \"screenings\":[{\r\n        \"theatreId\":1,\r\n        \"theatreName\":\"PVR\",\r\n        \"screenId\":1,\r\n        \"screenName\":\"Screen1\",\r\n        \"screeningDate\":\"2025-04-14\",\r\n        \"screeningTime\":\"09:00 PM\",\r\n        \"availableTickets\":200\r\n    }]\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}movie/save",
+					"host": [
+						"{{Ticket_URL}}movie"
+					],
+					"path": [
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Movie By Name",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}movie/byName/JanaNayagan",
+					"host": [
+						"{{Ticket_URL}}movie"
+					],
+					"path": [
+						"byName",
+						"JanaNayagan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Movie By Name Date",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}movie/byNameAndDate/GBU-1/2025-04-19",
+					"host": [
+						"{{Ticket_URL}}movie"
+					],
+					"path": [
+						"byNameAndDate",
+						"GBU-1",
+						"2025-04-19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save Seat",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"screeningId\":1,\r\n    \"totalSeats\":100,\r\n    \"availableSeats\":22\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}seat/save",
+					"host": [
+						"{{Ticket_URL}}seat"
+					],
+					"path": [
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "booking Ticket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":1,\r\n    \"screeningId\":1,\r\n    \"seatNo\":22\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Ticket_URL}}ticket/save",
+					"host": [
+						"{{Ticket_URL}}ticket"
+					],
+					"path": [
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}payment/create/10",
+					"host": [
+						"{{Ticket_URL}}payment"
+					],
+					"path": [
+						"create",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Currency Convertion",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}currency/convert?from=USD&to=INR&amount=10",
+					"host": [
+						"{{Ticket_URL}}currency"
+					],
+					"path": [
+						"convert"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "USD"
+						},
+						{
+							"key": "to",
+							"value": "INR"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

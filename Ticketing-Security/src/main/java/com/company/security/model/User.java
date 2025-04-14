@@ -2,6 +2,8 @@ package com.company.security.model;
 
 import java.util.Set;
 
+import com.company.common.config.Auditable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "users")
-public class User {
+public class User extends Auditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

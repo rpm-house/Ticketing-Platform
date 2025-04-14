@@ -14,6 +14,7 @@ import com.company.security.model.User;
 import com.company.security.service.RoleService;
 import com.company.security.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,6 +28,7 @@ public class IntializeController {
 	@Autowired
 	UserService userService;
 
+	@Operation(summary = "Create Admin Role and User to Initialize", description = "Initialization")
 	@PostMapping("/")
 	public String initialize() throws URISyntaxException {
 

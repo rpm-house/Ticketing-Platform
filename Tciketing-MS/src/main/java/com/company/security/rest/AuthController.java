@@ -12,16 +12,20 @@ import com.company.dto.AuthResponseDTO;
 import com.company.dto.LoginDTO;
 import com.company.security.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
 	@Autowired
     private AuthService authService;
 
+	@Operation(summary = "Get Token for users", description = "Returns JWT Token.")
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO){
 
@@ -32,6 +36,7 @@ public class AuthController {
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
         authResponseDTO.setAccessToken(token);
 
+        log.info("Token  Generated. ");
         //03 - Return the response to the user
         return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
     }
