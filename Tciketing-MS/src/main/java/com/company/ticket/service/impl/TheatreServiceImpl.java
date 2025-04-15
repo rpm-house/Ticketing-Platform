@@ -65,12 +65,12 @@ public class TheatreServiceImpl implements TheatreService {
 		Theatre existingTheatre = theatreRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 		log.info("existing: {}", existingTheatre);
-		BeanUtils.copyProperties(theatre, existingTheatre);
 		Set<Screen> screenSet = existingTheatre.getScreens().stream().map(existingScreen -> {
 			theatre.getScreens().stream().filter(screen -> screen.getId().equals(existingScreen.getId())).findFirst()
 					.ifPresent(screen -> BeanUtils.copyProperties(screen, existingScreen));
 			return existingScreen;
 		}).collect(Collectors.toSet());
+		BeanUtils.copyProperties(theatre, existingTheatre);
 		existingTheatre.setScreens(screenSet);
 		screenRepository.saveAll(screenSet);
 		return theatreRepository.save(existingTheatre);
