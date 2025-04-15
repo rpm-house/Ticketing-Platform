@@ -223,7 +223,66 @@
 			"response": []
 		},
 		{
+			"name": "update theatre (Partner)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"PVR\",\r\n    \"city\":\"Chennai\",\r\n    \"area\":\"OMR\",\r\n    \"screens\":[{\r\n        \"name\":\"Screen1\",\r\n        \"totalSeats\":200,\r\n        \"type\":\"AC\",\r\n        \"seats\":[{\r\n        \"row\":\"A\",\r\n        \"seatNumber\":\"10\",\r\n        \"type\":\"SOFA\"\r\n    },\r\n    {\r\n        \"row\":\"A\",\r\n        \"seatNumber\":\"11\",\r\n        \"type\":\"SOFA\"\r\n    }]\r\n    },\r\n    {\r\n        \"name\":\"Screen2\",\r\n        \"totalSeats\":100,\r\n        \"type\":\"MINI\",\r\n        \"seats\":[{\r\n        \"row\":\"B\",\r\n        \"seatNumber\":\"10\",\r\n        \"type\":\"SOFA\"\r\n    },\r\n    {\r\n        \"row\":\"B\",\r\n        \"seatNumber\":\"11\",\r\n        \"type\":\"SOFA\"\r\n    }]\r\n    }]\r\n}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8080/theatre/save",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"theatre",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get All Theatre (Partner)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Ticket_URL}}theatre/",
+					"host": [
+						"{{Ticket_URL}}theatre"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Theatre By Id (Partner)",
 			"request": {
 				"auth": {
 					"type": "bearer",

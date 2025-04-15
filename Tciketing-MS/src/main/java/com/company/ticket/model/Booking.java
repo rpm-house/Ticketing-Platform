@@ -1,5 +1,8 @@
 package com.company.ticket.model;
 
+import java.io.Serializable;
+
+import com.company.common.config.Auditable;
 import com.company.security.model.User;
 
 import jakarta.persistence.CascadeType;
@@ -17,7 +20,12 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "ticket")
-public class Booking {
+public class Booking extends Auditable implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5371027972172753034L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

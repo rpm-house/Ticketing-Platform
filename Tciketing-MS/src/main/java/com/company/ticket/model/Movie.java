@@ -1,6 +1,9 @@
 package com.company.ticket.model;
 
+import java.io.Serializable;
 import java.util.Set;
+
+import com.company.common.config.Auditable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,8 +20,12 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "movie")
-public class Movie {
+public class Movie extends Auditable implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4787826670036042190L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

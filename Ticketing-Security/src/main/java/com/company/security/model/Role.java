@@ -1,5 +1,7 @@
 package com.company.security.model;
 
+import java.io.Serializable;
+
 import com.company.common.config.Auditable;
 
 import jakarta.persistence.Entity;
@@ -12,7 +14,11 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "roles")
-public class Role extends Auditable{
+public class Role  extends Auditable implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7555264454648022525L;
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

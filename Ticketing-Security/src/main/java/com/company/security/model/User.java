@@ -1,5 +1,6 @@
 package com.company.security.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import com.company.common.config.Auditable;
@@ -19,8 +20,12 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "users")
-public class User extends Auditable {
+public class User  extends Auditable implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7396686618989923008L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

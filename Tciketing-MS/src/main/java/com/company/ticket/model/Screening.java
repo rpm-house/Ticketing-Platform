@@ -1,5 +1,9 @@
 package com.company.ticket.model;
 
+import java.io.Serializable;
+
+import com.company.common.config.Auditable;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +22,12 @@ import lombok.Data;
 @Table(name = "screening", uniqueConstraints=
 @UniqueConstraint(columnNames={"theatre_id", "screen_id"}))
 
-public class Screening {
+public class Screening  extends Auditable implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -320673936900254559L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
