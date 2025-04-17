@@ -13,6 +13,7 @@
 		<module>Ticketing-Common</module>
 		<module>Ticketing-Security</module>
 		<module>Tciketing-MS</module>
+		<module>Ticket-ML</module>
 	</modules>
 
 

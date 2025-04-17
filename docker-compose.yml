@@ -1,23 +1,83 @@
+version: '3.8'
+
 services:
-  app:
-    image: amazoncorretto:17-alpine
+   ml-model:
+    build:
+      context: ./Ticket-ML
+      dockerfile: Dockerfile
+    container_name: ml-model
+    ports:
+      - 5000:5000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://ml-model:5000/health"]
+      interval: 30s
+      retries: 1
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - app_network
+
+   ticket-platform-app:
+    build:
+      context: ./Tciketing-MS
+      dockerfile: Dockerfile
+    container_name: ticket-platform-app
     ports:
       - 8089:8089
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/ticket_platform?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - spring.datasource.url=jdbc:mysql://mysql:3306/ticket_platform?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - spring.redis.host=redis
+      - ml.api.url=http://ml-model:5000/predict
     depends_on:
       - mysql
-  mysql:
+      - redis
+      - ml-model
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8089/actuator/health"]
+      interval: 30s
+      retries: 1
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - app_network
+   mysql:
     image: mysql:8.0
-    ports:
-      - 3307:3307
+    container_name: mysql
     environment:
       MYSQL_DATABASE: ticket_platform
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-  redis:
-    image: redis:latest
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 1
+    restart: unless-stopped
+    networks:
+      - app_network
+
+   redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      interval: 10s
+      retries: 1
+    restart: unless-stopped
+    networks:
+      - app_network
+
+ 
+
 volumes:
-  mysql_data: null
+  mysql_data:
+
+networks:
+  app_network:
+    driver: bridge

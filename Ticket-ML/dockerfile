@@ -1,0 +1,21 @@
+FROM python:3.10.0
+
+WORKDIR /app
+
+# Upgrade pip
+RUN python -m pip install --upgrade pip
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of your application into the container
+COPY . .
+
+# Expose the port that FastAPI will use
+EXPOSE 5000
+
+# Command to run FastAPI with Uvicorn when the container starts
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
