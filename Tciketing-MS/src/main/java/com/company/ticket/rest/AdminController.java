@@ -58,4 +58,8 @@ public class AdminController {
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
 
+	@GetMapping("/users")
+	public ResponseEntity<List<User>> getAll() {
+		return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+	}
 }

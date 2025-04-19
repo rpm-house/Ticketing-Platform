@@ -1,4 +1,4 @@
-package com.company.common.config;
+package com.company.common.config.audit;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,7 @@
 package com.company.security.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +41,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return savedUser;
+	}
+
+	@Override
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 
 }

@@ -3,7 +3,7 @@ package com.company.ticket.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.company.common.config.Auditable;
+import com.company.common.config.audit.Auditable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -2,12 +2,10 @@ package com.company.dto;
 
 import java.io.Serializable;
 
-import com.company.common.config.Auditable;
-
 import lombok.Data;
 
 @Data
-public class LoginDTO  extends Auditable implements Serializable{
+public class LoginDTO implements Serializable{
 
 	/**
 	 * 

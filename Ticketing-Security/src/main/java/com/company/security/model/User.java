@@ -3,7 +3,7 @@ package com.company.security.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.company.common.config.Auditable;
+import com.company.common.config.audit.Auditable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +22,7 @@ import lombok.Data;
 @Table(name = "users")
 public class User  extends Auditable implements Serializable {
 
+	
 	/**
 	 * 
 	 */
@@ -42,5 +43,14 @@ public class User  extends Auditable implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
+	
+	public User(Long userId) {
+		this.id = userId;
+	}
+
+	public User() {
+	}
+
+	
 
 }

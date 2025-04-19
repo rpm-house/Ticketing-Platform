@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.ticket.dto.BookingRequestDTO;
+import com.company.ticket.dto.BookingResponseDTO;
 import com.company.ticket.model.Booking;
 import com.company.ticket.service.BookingService;
 
@@ -30,7 +32,7 @@ public class BookingController {
 
 	@Operation(summary = "Ticket Booking", description = "Returns Ticket Booking Object.")
 	@PostMapping("/save")
-	public ResponseEntity<Booking> save(@RequestBody Booking booking) {
+	public ResponseEntity<BookingResponseDTO> save(@RequestBody BookingRequestDTO booking) {
 		log.info("Ticket Booking Initiated. : {}", booking);
 		return new ResponseEntity<>(bookingService.save(booking), HttpStatus.OK);
 	}
@@ -40,8 +42,6 @@ public class BookingController {
 	public ResponseEntity<Booking> get(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(bookingService.findById(id), HttpStatus.OK);
 	}
-	
-	
 
 	@GetMapping("/")
 	public ResponseEntity<List<Booking>> getAll() {

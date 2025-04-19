@@ -1,10 +1,13 @@
 package com.company.ticket.model;
 
 import java.io.Serializable;
+import java.util.List;
 
-import com.company.common.config.Auditable;
+import com.company.common.config.audit.Auditable;
+import com.company.ticket.util.SeatInfoListConverter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,8 +32,15 @@ public class Screen extends Auditable implements Serializable {
 
 	@Column(nullable = false)
 	private int totalSeats;
+	
+	@Column(nullable = false)
+	private int blockedSeats;
 
 	@Column(nullable = false)
 	private String type;
+	
+	@Convert(converter = SeatInfoListConverter.class)
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private List<SeatInfo> seatInfoList;
 
 }

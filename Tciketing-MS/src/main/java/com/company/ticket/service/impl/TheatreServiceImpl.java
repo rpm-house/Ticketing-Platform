@@ -1,9 +1,7 @@
 package com.company.ticket.service.impl;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -51,7 +49,7 @@ public class TheatreServiceImpl implements TheatreService {
 	@Override
 	@Cacheable(value = "theatre", key = "#id")
 	public Theatre findById(Long id) {
-		return theatreRepository.findById(id).orElse(new Theatre());
+		return theatreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 	}
 
 	@Override
@@ -62,15 +60,16 @@ public class TheatreServiceImpl implements TheatreService {
 	@Override
 	@CachePut(value = "theatre", key = "#id")
 	public Theatre update(Long id, Theatre theatre) {
+		String[] ignoreFields = new String[] { "id", "createdAt", "createdBy" };
 		Theatre existingTheatre = theatreRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 		log.info("existing: {}", existingTheatre);
 		Set<Screen> screenSet = existingTheatre.getScreens().stream().map(existingScreen -> {
 			theatre.getScreens().stream().filter(screen -> screen.getId().equals(existingScreen.getId())).findFirst()
-					.ifPresent(screen -> BeanUtils.copyProperties(screen, existingScreen));
+					.ifPresent(screen -> BeanUtils.copyProperties(screen, existingScreen, ignoreFields));
 			return existingScreen;
 		}).collect(Collectors.toSet());
-		BeanUtils.copyProperties(theatre, existingTheatre);
+		BeanUtils.copyProperties(theatre, existingTheatre, ignoreFields);
 		existingTheatre.setScreens(screenSet);
 		screenRepository.saveAll(screenSet);
 		return theatreRepository.save(existingTheatre);

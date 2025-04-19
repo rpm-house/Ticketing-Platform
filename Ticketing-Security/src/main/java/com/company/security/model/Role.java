@@ -2,7 +2,7 @@ package com.company.security.model;
 
 import java.io.Serializable;
 
-import com.company.common.config.Auditable;
+import com.company.common.config.audit.Auditable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

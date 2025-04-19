@@ -1,16 +1,17 @@
 package com.company.common.exception;
 
 import java.io.IOException;
-import java.util.Map;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,25 +27,53 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		try {
 			filterChain.doFilter(request, response);
+		} catch (SignatureException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		} catch (JwtException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		} catch (AuthorizationDeniedException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.FORBIDDEN.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		} catch (DataIntegrityViolationException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		} catch (EntityNotFoundException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		} catch (ConstraintViolationException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
+		}catch (TicketException e) {
+			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
+			ErrorResponse errorResponse = new ErrorResponse(e);
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
 		} catch (RuntimeException e) {
 			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
 			ErrorResponse errorResponse = new ErrorResponse(e);
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-			response.getWriter().append(convertObjectToJson(errorResponse));
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
 		} catch (Exception e) {
 			log.error("Error on method [doFilterInternal] Exception: {}", e.getMessage());
 			ErrorResponse errorResponse = new ErrorResponse(e);
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-			response.getWriter().append(convertObjectToJson(errorResponse));
+			response.getWriter().append(SecurityUtils.convertObjectToJson(errorResponse));
 		}
 
 	}
 
-	public String convertObjectToJson(ErrorResponse object) throws JsonProcessingException {
-		if (object == null) {
-			return null;
-		}
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(object);
-	}
 }

@@ -52,7 +52,7 @@ public class UserController {
 			role = roles.stream().filter(r -> r.getName().equalsIgnoreCase("ROLE_CUSTOMER")).findFirst().get();
 		} else {
 			log.error("In valid User Type.");
-			throw new TicketException("In valid User Type.");
+			throw new TicketException("In valid User Type.", HttpStatus.NOT_IMPLEMENTED.value());
 		}
 		roleSet.add(role);
 		user.setRoles(roleSet);
@@ -60,5 +60,7 @@ public class UserController {
 		log.info("User Created. : {}", savedUser);
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
+	
+	
 
 }

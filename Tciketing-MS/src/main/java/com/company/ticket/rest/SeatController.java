@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.ticket.dto.SeatInfoRequestDTO;
+import com.company.ticket.dto.SeatInfoResponseDTO;
 import com.company.ticket.model.Seat;
+import com.company.ticket.model.SeatInfo;
 import com.company.ticket.service.SeatService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +55,16 @@ public class SeatController {
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		seatService.deleteById(id);
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/available/{screeningId}")
+	public ResponseEntity<List<SeatInfo>> getAvailableSeats(@PathVariable("screeningId") Long screeningId) {
+		return new ResponseEntity<>(seatService.getAvailableSeats(screeningId), HttpStatus.OK);
+	}
+	
+	@PostMapping("/validate/{screeningId}")
+	public ResponseEntity<SeatInfoResponseDTO> validate(@PathVariable("screeningId") Long screeningId, @RequestBody SeatInfoRequestDTO seatInfoRequestDTO) {
+		return new ResponseEntity<>(seatService.validate(screeningId, seatInfoRequestDTO), HttpStatus.OK);
 	}
 
 }

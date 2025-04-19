@@ -2,11 +2,13 @@ package com.company.ticket.service;
 
 import java.util.List;
 
+import com.company.ticket.dto.BookingRequestDTO;
+import com.company.ticket.dto.BookingResponseDTO;
 import com.company.ticket.model.Booking;
 
 public interface BookingService {
 
-	public Booking save(Booking booking);
+	public BookingResponseDTO save(BookingRequestDTO booking);
 
 	public Booking  findById(Long id);
 

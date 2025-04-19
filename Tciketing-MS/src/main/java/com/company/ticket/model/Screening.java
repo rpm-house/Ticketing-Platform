@@ -2,7 +2,7 @@ package com.company.ticket.model;
 
 import java.io.Serializable;
 
-import com.company.common.config.Auditable;
+import com.company.common.config.audit.Auditable;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,10 +19,9 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "screening", uniqueConstraints=
-@UniqueConstraint(columnNames={"theatre_id", "screen_id"}))
+@Table(name = "screening", uniqueConstraints = @UniqueConstraint(columnNames = { "theatre_id", "screen_id" }))
 
-public class Screening  extends Auditable implements Serializable {
+public class Screening extends Auditable implements Serializable {
 
 	/**
 	 * 
@@ -38,8 +37,8 @@ public class Screening  extends Auditable implements Serializable {
 	private Long theatreId;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "theatre_id", referencedColumnName = "id")
-    private Theatre theatre;
+	@JoinColumn(name = "theatre_id", referencedColumnName = "id")
+	private Theatre theatre;
 
 	@Column(nullable = false)
 	private Long screenId;
@@ -55,5 +54,12 @@ public class Screening  extends Auditable implements Serializable {
 
 	@Column(nullable = false)
 	private int availableTickets;
+
+	public Screening(Long screeningId) {
+		this.id = screeningId;
+	}
+
+	public Screening() {
+	}
 
 }
