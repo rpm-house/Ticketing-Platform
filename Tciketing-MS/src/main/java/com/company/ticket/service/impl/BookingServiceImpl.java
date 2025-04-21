@@ -55,7 +55,7 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public Booking findById(Long id) {
-		return bookingRepository.findById(id).orElse(new Booking());
+		return bookingRepository.findById(id).orElseThrow();
 	}
 
 	@Override
@@ -64,8 +64,23 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public Booking update(Long id, Booking booking) {
-		return bookingRepository.save(booking);
+	public BookingResponseDTO update(Long id, BookingRequestDTO bookingDTO) {
+		
+		Booking booking =  bookingRepository.findById(id).get();
+		booking.setSeatInfoList(bookingDTO.getSeatInfoList());
+		booking.setUser(new User(bookingDTO.getUserId()));
+		booking.setScreening(new Screening(bookingDTO.getScreeningId()));
+		BookingResponseDTO bookingResponseDTO = new BookingResponseDTO();
+		Booking bookingResponse  = bookingRepository.save(booking);
+		
+		Screening screening  = screeningRepository.findById(bookingDTO.getScreeningId()).get();
+		Screen screen = screenRepository.findById(screening.getScreenId()).get();
+		screen.setBlockedSeats(bookingDTO.getSeatInfoList().size());
+		screenRepository.save(screen);
+		
+		BeanUtils.copyProperties(bookingDTO, bookingResponseDTO);
+		bookingResponseDTO.setBookingId(bookingResponse.getId());
+		return bookingResponseDTO;
 	}
 
 	@Override

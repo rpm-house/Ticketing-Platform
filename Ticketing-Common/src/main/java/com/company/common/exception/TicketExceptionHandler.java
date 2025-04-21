@@ -7,8 +7,10 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -46,7 +48,7 @@ public class TicketExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(ex);
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(SecurityUtils.convertObjectToJson(errorResponse));
 	}
-	
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleTicketException(DataIntegrityViolationException ex) throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler DataIntegrityViolationException: {}", ex.getMessage());
@@ -55,7 +57,7 @@ public class TicketExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SecurityUtils.convertObjectToJson(errorResponse));
 
 	}
-	
+
 	@ExceptionHandler(TransactionSystemException.class)
 	public ResponseEntity<?> handleTicketException(TransactionSystemException ex) throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler TransactionSystemException: {}", ex.getMessage());
@@ -65,9 +67,9 @@ public class TicketExceptionHandler {
 
 	}
 
-	
 	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-	public ResponseEntity<?> handleTicketException(SQLIntegrityConstraintViolationException ex) throws JsonProcessingException {
+	public ResponseEntity<?> handleTicketException(SQLIntegrityConstraintViolationException ex)
+			throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler SQLIntegrityConstraintViolationException: {}", ex.getMessage());
 		log.debug("Error on TicketExceptionHandler SQLIntegrityConstraintViolationException: {}", ex);
 		ErrorResponse errorResponse = new ErrorResponse(ex);
@@ -83,7 +85,7 @@ public class TicketExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SecurityUtils.convertObjectToJson(errorResponse));
 
 	}
-	
+
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<?> handleTicketException(ConstraintViolationException ex) throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler ConstraintViolationException: {}", ex.getMessage());
@@ -92,7 +94,7 @@ public class TicketExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SecurityUtils.convertObjectToJson(errorResponse));
 
 	}
-	
+
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<?> handleTicketException(NoSuchElementException ex) throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler DataIntegrityViolationException: {}", ex.getMessage());
@@ -101,11 +103,29 @@ public class TicketExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SecurityUtils.convertObjectToJson(errorResponse));
 
 	}
-	
+
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<?> handleTicketException(HttpRequestMethodNotSupportedException ex)
+			throws JsonProcessingException {
+		log.error("Error on TicketExceptionHandler HttpRequestMethodNotSupportedException: {}", ex.getMessage());
+		log.debug("Error on TicketExceptionHandler HttpRequestMethodNotSupportedException: {}", ex);
+		ErrorResponse errorResponse = new ErrorResponse(ex);
+		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+				.body(SecurityUtils.convertObjectToJson(errorResponse));
+	}
+
 	@ExceptionHandler(JsonProcessingException.class)
 	public ResponseEntity<?> handleGeneric(JsonProcessingException ex) {
 		log.error("Error on TicketExceptionHandler JsonProcessingException: {}", ex.getMessage());
 		log.debug("Error on TicketExceptionHandler JsonProcessingException: {}", ex);
+		ErrorResponse errorResponse = new ErrorResponse(ex);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse.toString());
+	}
+	
+	@ExceptionHandler(HttpMessageConversionException.class)
+	public ResponseEntity<?> handleGeneric(HttpMessageConversionException ex) {
+		log.error("Error on TicketExceptionHandler HttpMessageConversionException: {}", ex.getMessage());
+		log.debug("Error on TicketExceptionHandler HttpMessageConversionException: {}", ex);
 		ErrorResponse errorResponse = new ErrorResponse(ex);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse.toString());
 	}
@@ -118,6 +138,9 @@ public class TicketExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SecurityUtils.convertObjectToJson(errorResponse));
 	}
 
+	
+	
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleGeneric(Exception ex) throws JsonProcessingException {
 		log.error("Error on TicketExceptionHandler Exception: {}", ex.getMessage());

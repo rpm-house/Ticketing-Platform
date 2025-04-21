@@ -31,39 +31,38 @@ public class SeatController {
 	private SeatService seatService;
 
 	@PostMapping("/save")
-	public ResponseEntity<Seat> save(@RequestBody Seat seat) {
-		log.info("");
-		return new ResponseEntity<>(seatService.save(seat), HttpStatus.OK);
+	public ResponseEntity<String> save() {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("This endpoint is not implemented yet.");
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Seat> get(@PathVariable("id") Long id) {
-		return new ResponseEntity<>(seatService.findById(id), HttpStatus.OK);
+	public ResponseEntity<String> get(@PathVariable("id") Long id) {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("This endpoint is not implemented yet.");
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<List<Seat>> getAll() {
-		return new ResponseEntity<>(seatService.findAll(), HttpStatus.OK);
+	public ResponseEntity<String> getAll() {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("This endpoint is not implemented yet.");
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Seat> update(@PathVariable Long id, @RequestBody Seat seat) {
-		return new ResponseEntity<>(seatService.update(id, seat), HttpStatus.OK);
+	public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Seat seat) {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("This endpoint is not implemented yet.");
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
-		seatService.deleteById(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("This endpoint is not implemented yet.");
 	}
-	
+
 	@GetMapping("/available/{screeningId}")
 	public ResponseEntity<List<SeatInfo>> getAvailableSeats(@PathVariable("screeningId") Long screeningId) {
 		return new ResponseEntity<>(seatService.getAvailableSeats(screeningId), HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/validate/{screeningId}")
-	public ResponseEntity<SeatInfoResponseDTO> validate(@PathVariable("screeningId") Long screeningId, @RequestBody SeatInfoRequestDTO seatInfoRequestDTO) {
+	public ResponseEntity<SeatInfoResponseDTO> validate(@PathVariable("screeningId") Long screeningId,
+			@RequestBody SeatInfoRequestDTO seatInfoRequestDTO) {
 		return new ResponseEntity<>(seatService.validate(screeningId, seatInfoRequestDTO), HttpStatus.OK);
 	}
 

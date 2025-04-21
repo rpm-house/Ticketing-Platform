@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -32,7 +33,7 @@ public class ErrorResponse {
 		List<StackTraceElement> list = Arrays.stream(exception.getStackTrace())
 				.filter(se -> se.getClassName().startsWith("com.company")) // or any other filter criteria
 				.collect(Collectors.toList());
-		exception.printStackTrace();
+		//exception.printStackTrace();
 		log.error("getStackTrace : " + list);
 		log.info("exception: "+exception);
 		if (null != exception.getCause()) {
@@ -50,6 +51,8 @@ public class ErrorResponse {
 			this.status = HttpStatus.NOT_FOUND.value();
 		} else if (exception instanceof ConstraintViolationException) {
 			this.status = HttpStatus.BAD_REQUEST.value();
+		}else if (exception instanceof HttpRequestMethodNotSupportedException) {
+			this.status = HttpStatus.METHOD_NOT_ALLOWED.value();
 		}else if (exception instanceof NoSuchElementException) {
 			this.status = HttpStatus.NOT_FOUND.value();
 		}else if (exception instanceof TicketException) {

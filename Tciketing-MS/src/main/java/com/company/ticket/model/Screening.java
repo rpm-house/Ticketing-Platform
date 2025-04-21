@@ -16,7 +16,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Table(name = "screening", uniqueConstraints = @UniqueConstraint(columnNames = { "theatre_id", "screen_id" }))

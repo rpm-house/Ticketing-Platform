@@ -6,6 +6,7 @@ import java.util.List;
 import com.company.common.config.audit.Auditable;
 import com.company.security.model.User;
 import com.company.ticket.util.SeatInfoListConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -20,18 +21,15 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-    name = "ticket",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"screening_id", "seat_no"}) // ensure no duplicate seats in same screening
-    }
-)	
+@Table(name = "ticket", uniqueConstraints = { @UniqueConstraint(columnNames = { "screening_id", "seat_no" }) })
 public class Booking extends Auditable implements Serializable {
 
 	/**
@@ -44,14 +42,15 @@ public class Booking extends Auditable implements Serializable {
 	private Long id;
 
 	@Convert(converter = SeatInfoListConverter.class)
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private List<SeatInfo> seatInfoList;
+	@Column(columnDefinition = "TEXT", nullable = false)
+	private List<SeatInfo> seatInfoList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screening_id", nullable = false)
-    private Screening screening;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "screening_id", nullable = false)
+	@JsonIgnore
+	private Screening screening;
 }

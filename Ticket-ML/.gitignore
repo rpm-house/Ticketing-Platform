@@ -1,2 +1,6 @@
 /bin/
+__pycache__
 /target/
+.project
+.settings
+.classpath

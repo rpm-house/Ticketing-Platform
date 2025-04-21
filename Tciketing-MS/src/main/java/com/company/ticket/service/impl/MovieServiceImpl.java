@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +33,7 @@ public class MovieServiceImpl implements MovieService {
 	public Movie save(Movie movie) {
 		List<Screening> screenings = movie.getScreenings().stream().map(s -> {
 			s.setTheatre(theatreRepository.findById(s.getTheatreId()).get());
-			Integer tickets = s.getTheatre().getScreens().stream()
-					  .map(x -> x.getTotalSeats())
-					  .reduce(0, Integer::sum);
+			Integer tickets = s.getTheatre().getScreens().stream().map(x -> x.getTotalSeats()).reduce(0, Integer::sum);
 			s.setAvailableTickets(tickets);
 			return s;
 		}).collect(Collectors.toList());
@@ -56,15 +55,8 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public Movie findByNameAndDate(String name, String date) {
 		Movie movie = movieRepository.findByName(name);
-		Set<Screening> screenings = movie.getScreenings().stream()
-				.filter(s -> s.getScreeningDate().contains(date)).collect(Collectors.toSet());
-		/*
-		 * Set<Screening> screenings1 =screenings.stream().map(s -> {
-		 * s.setTheatre(theatreRepository.findById(s.getTheatreId()).get()); Integer
-		 * tickets = s.getTheatre().getScreens().stream() .map(x -> x.getTotalSeats())
-		 * .reduce(0, Integer::sum); s.setAvailableTickets(tickets); return s;
-		 * }).collect(Collectors.toSet());
-		 */
+		Set<Screening> screenings = movie.getScreenings().stream().filter(s -> s.getScreeningDate().contains(date))
+				.collect(Collectors.toSet());
 		movie.setScreenings(screenings);
 		return movie;
 	}
@@ -74,9 +66,12 @@ public class MovieServiceImpl implements MovieService {
 		return movieRepository.findAll();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Movie update(Long id, Movie movie) {
-		return movieRepository.save(movie);
+		Movie existingMovie  =  movieRepository.findById(id).get();
+		BeanUtils.copyProperties(movie, existingMovie);
+		return save(existingMovie);
 	}
 
 	@Override

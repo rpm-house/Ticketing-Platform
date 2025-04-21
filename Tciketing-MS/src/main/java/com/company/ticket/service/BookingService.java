@@ -14,8 +14,9 @@ public interface BookingService {
 
 	public List<Booking> findAll();
 
-	public Booking update(Long id, Booking booking);
+	public BookingResponseDTO update(Long id, BookingRequestDTO bookingRequestDTO);
 
 	public void deleteById(Long id);
+	
 
 }

@@ -17,7 +17,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Table(name = "theatre")
@@ -41,4 +43,12 @@ public class Theatre extends Auditable implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "theatre_screen", joinColumns = @JoinColumn(name = "theatre_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "screen_id", referencedColumnName = "id"))
 	private Set<Screen> screens;
+
+	public Theatre(Long id) {
+		this.id = id;
+	}
+
+	public Theatre() {
+	}
+
 }
